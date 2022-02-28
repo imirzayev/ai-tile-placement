@@ -85,6 +85,16 @@ class Landscape:
                     self.bushes[i][j] = 0
         return startX + 4, startY + 4
 
+    def count_colors(self):
+        color_dict = {'1' : 0, '2' : 0, '3' : 0, '4' : 0}
+
+        for i in range(self.size):
+            for j in range(self.size):
+                if self.bushes[i][j] != 0:
+                    color_dict[str(self.bushes[i][j])] += 1
+
+        return color_dict
+
     def __str__(self) -> str:
         res = ""
         for i in range(self.size):
@@ -104,7 +114,7 @@ if __name__ == "__main__":
 
     lines = list(map(lambda x: re.sub('[\n]$', '', x), lines))
     landscape = Landscape(lines)
-    print(landscape)
+    print(landscape.count_colors())
     landscape.outer_block(0, 0)
     print('\n\n')
     print(landscape)
