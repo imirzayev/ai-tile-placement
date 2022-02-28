@@ -35,9 +35,11 @@ def read_landscape(landscape):
     bushes = [[0] * len(landscape) for _ in range(len(landscape))]
 
     for i in range(len(landscape)):
-        for j in range(0, len(landscape), 2):
+        t = 0
+        for j in range(0, 2 * len(landscape), 2):
             if landscape[i][j] != ' ':
-                bushes[i][j] = int(landscape[i][j])
+                bushes[i][t] = int(landscape[i][j])
+            t += 1
     return bushes
 
 def get_tiles(lines, tile_idx):
@@ -63,10 +65,33 @@ def read_targets(targets):
     return my_dict
 
 
+def full_block(startX, startY):
+    for i in range(startX, startX + 4):
+        for j in range(startY, startY) + 4:
+            bushes[i][j] = 0
+    return startX + 4, startY + 4
+
+def outer_block(startX, startY):
+    for i in range(startX, startX + 4):
+        for j in range(startY, startY) + 4:
+            if (i == startX) or (i == startX + 4) or (j == startY) or (j == startY + 4):
+                bushes[i][j] = 0
+    return startX + 4, startY + 4
+
+def l_block(startX, startY):
+    for i in range(startX, startX + 4):
+        for j in range(startY, startY) + 4:
+            if (i == startX) or (j == startY):
+                bushes[i][j] = 0
+    return startX + 4, startY + 4
+
+
 land_idx, tile_idx, target_idx = get_indexes(lines)
 print(land_idx, tile_idx, target_idx)
 landscape = get_landscape(lines, land_idx)
 bushes = read_landscape(landscape)
+print(landscape)
+print(bushes)
 tiles = get_tiles(lines, tile_idx)
 tiles_dict = read_tiles(tiles)
 print(tiles)
@@ -74,7 +99,7 @@ print(tiles_dict)
 
 targets = get_targets(lines, target_idx)
 targets_dict = read_targets(targets)
-print(targets)
-print(targets_dict)
+# print(targets)
+# print(targets_dict)
 
 
