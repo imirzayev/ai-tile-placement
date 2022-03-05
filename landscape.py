@@ -1,4 +1,5 @@
 import re
+import simpleai
 
 
 class Landscape:
@@ -11,59 +12,9 @@ class Landscape:
         self.bushes = self.read_landscape()
         self.tiles = self.read_tiles()
         self.targets = self.read_targets()
+        self.current = self.count_colors()
 
-    def get_indexes(self):
-        land_idx, tile_idx, target_idx = 0, 0, 0
-        tiles_found = False
-
-        for i, x in enumerate(self.lines):
-            if x.startswith('# Landscape'):
-                land_idx = i + 1
-            elif x.startswith('# Tiles:') and not tiles_found:
-                tile_idx = i + 1
-                tiles_found = True
-            elif x.startswith('# Targets:'):
-                target_idx = i + 1
-
-        size = len(self.lines[land_idx]) // 2
-
-        return land_idx, tile_idx, target_idx, size
-
-    def read_landscape(self):
-        dimension = len(self.lines[self.land_idx]) // 2
-        landscape = self.lines[self.land_idx:self.land_idx+dimension]
-
-        bushes = [[0] * len(landscape) for _ in range(len(landscape))]
-
-        for i in range(len(landscape)):
-            t = 0
-            for j in range(0, 2 * len(landscape), 2):
-                if landscape[i][j] != ' ':
-                    bushes[i][t] = int(landscape[i][j])
-                t += 1
-        return bushes
-
-
-    def read_tiles(self):
-        tiles = self.lines[self.tile_idx]
-
-        tile_dict = {}
-        tiles = re.sub('[\{\}]', '', tiles)
-        tiles = list(map(lambda x: x.strip(), tiles.split(',')))
-        for tile in tiles:
-            key, value = tile.split('=')
-            tile_dict[key] = value
-        return tile_dict
-
-
-    def read_targets(self):
-        targets = self.lines[self.target_idx:self.target_idx+self.COLORS]
-
-        taget_dict = {}
-        for target in targets:
-            key, value = target.split(':')
-            taget_dict[key] = value
-        return taget_dict
+    
 
     def full_block(self, startX, startY):
         for i in range(startX, startX + 4):
@@ -95,6 +46,20 @@ class Landscape:
 
         return color_dict
 
+    def check_distance(self):
+        diff_dict = {'1' : 0, '2' : 0, '3' : 0, '4' : 0}
+
+        for key, val in self.targets:
+            diff_dict[key] = self.targets[key] - self.current[key]
+
+        return diff_dict
+
+    def has_reached_target(self):
+        if all(v == 0 for v in self.current.values()):
+            return True
+        else:
+            return False
+
     def __str__(self) -> str:
         res = ""
         for i in range(self.size):
@@ -108,11 +73,6 @@ class Landscape:
 
 
 if __name__ == "__main__":
-    f = open("test.txt", "r")
-    lines = f.readlines()
-    f.close()
-
-    lines = list(map(lambda x: re.sub('[\n]$', '', x), lines))
     landscape = Landscape(lines)
     print(landscape.count_colors())
     landscape.outer_block(0, 0)
