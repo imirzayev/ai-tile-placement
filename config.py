@@ -1,1 +1,6 @@
 COLORS = 4
+
+CELL_SEPARATOR = " "
+LINE_SEPARATOR = "\n"
+
+TILE_SIZE = 4

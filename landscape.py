@@ -1,48 +1,36 @@
-import re
-import simpleai
+import config
+from input import TPInput
+from tile import Tile
 
 
 class Landscape:
-    def __init__(self, lines) -> None:
-        self.COLORS = 4
-        self.lines = lines
-        self.land_idx, self.tile_idx, self.target_idx, self.size = self.get_indexes()
-        self.CELL_SEPARATOR = " "
-        self.LINE_SEPARATOR = "\n"
-        self.bushes = self.read_landscape()
-        self.tiles = self.read_tiles()
-        self.targets = self.read_targets()
+    def __init__(self, tile_input):
+        self.landscape = tile_input.land_arr
+        self.tiles = tile_input.tiles
+        self.targets = tile_input.targets
+        self.land_size = tile_input.land_size
+
+        self.current = self.count_colors()
+        self.states = [self.landscape]
+
+    def put_tile(self, tile, startX, startY):
+        if tile.type == 'OUTER_BOUNDARY':
+            tile.outer_block(self, startX, startY)
+        elif tile.type == 'EL_SHAPE':
+            tile.el_block(self, startX, startY)
+        elif tile.type == 'FULL_BLOCK':
+            tile.full_block(self, startX, startY)
+
         self.current = self.count_colors()
 
-    
-
-    def full_block(self, startX, startY):
-        for i in range(startX, startX + 4):
-            for j in range(startY, startY + 4):
-                self.bushes[i][j] = 0
-        return startX + 4, startY + 4
-
-    def outer_block(self, startX, startY):
-        for i in range(startX, startX + 4):
-            for j in range(startY, startY + 4):
-                if (i == startX) or (i == startX +3) or (j == startY) or (j == startY + 3):
-                    self.bushes[i][j] = 0
-        return startX + 4, startY + 4
-
-    def l_block(self, startX, startY):
-        for i in range(startX, startX + 4):
-            for j in range(startY, startY + 4):
-                if (i == startX) or (j == startY):
-                    self.bushes[i][j] = 0
-        return startX + 4, startY + 4
 
     def count_colors(self):
         color_dict = {'1' : 0, '2' : 0, '3' : 0, '4' : 0}
 
-        for i in range(self.size):
-            for j in range(self.size):
-                if self.bushes[i][j] != 0:
-                    color_dict[str(self.bushes[i][j])] += 1
+        for i in range(self.land_size):
+            for j in range(self.land_size):
+                if self.landscape[i][j] != 0:
+                    color_dict[str(self.landscape[i][j])] += 1
 
         return color_dict
 
@@ -50,7 +38,7 @@ class Landscape:
         diff_dict = {'1' : 0, '2' : 0, '3' : 0, '4' : 0}
 
         for key, val in self.targets:
-            diff_dict[key] = self.targets[key] - self.current[key]
+            diff_dict[key] = val - self.current[key]
 
         return diff_dict
 
@@ -60,23 +48,44 @@ class Landscape:
         else:
             return False
 
+    def constr_check(self, tile, startX, startY):
+        def constr_ok():
+            for key, val in self.current.items():
+                if val < self.targets[key]:
+                    return False
+                else:
+                    return True
+
+        self.put_tile(tile, startX, startY)
+        if constr_ok():
+            self.states.append(self.landscape)
+            return True
+        else:
+            self.landscape = self.states[-1]
+            return False
+
     def __str__(self) -> str:
         res = ""
-        for i in range(self.size):
-            for j in range(self.size):
-                if self.bushes[i][j] > 0:
-                    res += str(self.bushes[i][j]) + self.CELL_SEPARATOR
+        for i in range(self.land_size):
+            for j in range(self.land_size):
+                if self.landscape[i][j] > 0:
+                    res += str(self.landscape[i][j]) + config.CELL_SEPARATOR
                 else:
-                    res += ' ' + self.CELL_SEPARATOR
-            res += self.LINE_SEPARATOR
+                    res += ' ' + config.CELL_SEPARATOR
+            res += config.LINE_SEPARATOR
         return res
 
 
 if __name__ == "__main__":
-    landscape = Landscape(lines)
+    tile_input = TPInput('inputs/tilesproblem_1326658913086500.txt')
+    landscape = Landscape(tile_input)
+    tile = Tile(next(iter(landscape.tiles.items())))
+    print(tile.count)
+    print(landscape)
     print(landscape.count_colors())
-    landscape.outer_block(0, 0)
+    landscape.put_tile(tile, 0, 0)
     print('\n\n')
     print(landscape)
+    print(landscape.count_colors())
 
     
