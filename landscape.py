@@ -1,11 +1,5 @@
-from re import S
-from tkinter.messagebox import NO
-from django import conf
-from urllib3 import Retry
 import config
 from input import TPInput
-from tile import Tile
-import random
 
 
 class Landscape:
@@ -14,8 +8,6 @@ class Landscape:
         self.tiles = tile_input.tiles
         self.targets = tile_input.targets
         self.land_size = tile_input.land_size
-
-        # self.current = self.count_colors(self.)
         self.states = [self.landscape]
         self.solution_map = []
 
