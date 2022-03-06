@@ -1,5 +1,6 @@
 import re
 import config
+from tile import Tile
 
 class TPInput:
 
@@ -51,15 +52,15 @@ class TPInput:
     def read_tiles(self):
         tiles = self.lines[self.tile_idx]
 
-        tile_dict = {}
+        tile_list = []
         tiles = re.sub('[\{\}]', '', tiles)
         tiles = list(map(lambda x: x.strip(), tiles.split(',')))
 
         for tile in tiles:
             key, value = tile.split('=')
-            tile_dict[key] = value
+            tile_list.append(Tile((key, int(value))))
 
-        return tile_dict
+        return tile_list
 
 
     def read_targets(self):
@@ -69,7 +70,7 @@ class TPInput:
 
         for target in targets:
             key, value = target.split(':')
-            taget_dict[key] = value
+            taget_dict[key] = int(value)
 
         return taget_dict
 
