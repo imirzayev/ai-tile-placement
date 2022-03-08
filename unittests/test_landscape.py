@@ -61,7 +61,7 @@ class TestLandscape(unittest.TestCase):
                          [4, 0, 3, 4, 0, 4, 3, 4, 3, 2, 2, 2, 1, 4, 3, 4, 3, 0, 0, 1]]
 
         landscape.put_tile(outer, *outer_location)
-        self.assertEqual(landscape.landscape, correct_outer)
+        self.assertEqual(landscape.bushes, correct_outer)
 
     def test_el_tile(self):
         """Checks whether putting el shape tile have the desired result."""
@@ -92,7 +92,7 @@ class TestLandscape(unittest.TestCase):
                       [4, 0, 3, 4, 0, 4, 3, 4, 3, 2, 2, 2, 1, 4, 3, 4, 0, 0, 0, 1]]
 
         landscape.put_tile(el, *el_location)
-        self.assertEqual(landscape.landscape, correct_el)
+        self.assertEqual(landscape.bushes, correct_el)
 
     def test_full_tile(self):
         """Checks whether putting full shape tile have the desired result."""
@@ -123,7 +123,7 @@ class TestLandscape(unittest.TestCase):
                         [4, 0, 3, 4, 0, 4, 3, 4, 3, 2, 2, 2, 1, 4, 3, 4, 3, 0, 0, 1]]
 
         landscape.put_tile(full, *full_location)
-        self.assertEqual(landscape.landscape, correct_full)
+        self.assertEqual(landscape.bushes, correct_full)
 
 
 if __name__ == '__main__':

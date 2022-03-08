@@ -16,29 +16,29 @@ def count_non_zeros(landscape, startX, startY):
 
 class Landscape:
     def __init__(self, tile_input):
-        self.landscape = tile_input.land_arr
+        self.bushes = tile_input.land_arr
         self.tiles = tile_input.tiles
         self.targets = tile_input.targets
         self.land_size = tile_input.land_size
-        self.current = self.count_colors(self.landscape)
-        self.states = [self.landscape]
+        self.current = self.count_colors(self.bushes)
+        self.states = [self.bushes]
         self.solution_map = {}
 
     def put_tile(self, tile, startX, startY):
         """Puts the given tile to the given coordinate and returns the copy of the landscape"""
 
         if tile.type == 'OUTER_BOUNDARY':
-            return tile.outer_block(self, startX, startY)
+            return tile.out(self, startX, startY)
         elif tile.type == 'EL_SHAPE':
-            return tile.el_block(self, startX, startY)
+            return tile.el(self, startX, startY)
         elif tile.type == 'FULL_BLOCK':
-            return tile.full_block(self, startX, startY)
+            return tile.full(self, startX, startY)
 
     def get_variable_lands(self):
         """Function to get the small sublandscapes size of 4x4"""
         new_l = []
         divider = self.land_size // config.TILE_SIZE
-        arr = np.array(self.landscape)
+        arr = np.array(self.bushes)
         ver_split = np.array_split(arr, divider, axis=0)
 
         for a in ver_split:
@@ -66,7 +66,7 @@ class Landscape:
         color_dict = {'1': 0, '2': 0, '3': 0, '4': 0}
 
         if landscape is None:
-            landscape = self.landscape
+            landscape = self.bushes
 
         for i in range(self.land_size):
             for j in range(self.land_size):
@@ -97,7 +97,7 @@ class Landscape:
 
         for i in range(self.land_size):
             for j in range(self.land_size):
-                cp[i][j] = self.landscape[i][j]
+                cp[i][j] = self.bushes[i][j]
 
         return cp
 
@@ -138,8 +138,8 @@ class Landscape:
         res = "\n_______________________________________\n"
         for i in range(self.land_size):
             for j in range(self.land_size):
-                if self.landscape[i][j] > 0:
-                    res += str(self.landscape[i][j]) + config.CELL_SEPARATOR
+                if self.bushes[i][j] > 0:
+                    res += str(self.bushes[i][j]) + config.CELL_SEPARATOR
                 else:
                     res += ' ' + config.CELL_SEPARATOR
             res += config.LINE_SEPARATOR

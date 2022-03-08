@@ -1,33 +1,36 @@
 import config
 
+
 class Tile:
     def __init__(self, tile):
-        self.size = config.TILE_SIZE
         self.type = tile[0]
         self.count = tile[1]
 
-    def full_block(self, landscape, startX, startY):
-        land_copy = landscape.landscape.copy()
-        for i in range(startX, startX + self.size):
-            for j in range(startY, startY + self.size):
-                land_copy[i][j] = 0
-        return land_copy
+    def full(self, landscape, startX, startY):
+        """Puts full shaped tile to the landscape and returns the copy of updated version"""
+        cp = landscape.bushes.copy()
+        for i in range(startX, startX + config.TILE_SIZE):
+            for j in range(startY, startY + config.TILE_SIZE):
+                cp[i][j] = 0
+        return cp
 
-    def outer_block(self, landscape, startX, startY):
-        land_copy = landscape.landscape.copy()
-        for i in range(startX, startX + self.size):
-            for j in range(startY, startY + self.size):
-                if (i == startX) or (i == startX + self.size - 1) or (j == startY) or (j == startY + self.size - 1):
-                    land_copy[i][j] = 0
-        return land_copy
+    def out(self, landscape, startX, startY):
+        """Puts outer shaped tile to the landscape and returns the copy of updated version"""
+        cp = landscape.bushes.copy()
+        for i in range(startX, startX + config.TILE_SIZE):
+            for j in range(startY, startY + config.TILE_SIZE):
+                if (i == startX) or (i == startX + config.TILE_SIZE - 1) or (j == startY) or (j == startY + config.TILE_SIZE - 1):
+                    cp[i][j] = 0
+        return cp
 
-    def el_block(self, landscape, startX, startY):
-        land_copy = landscape.landscape.copy()
-        for i in range(startX, startX + self.size):
-            for j in range(startY, startY + self.size):
+    def el(self, landscape, startX, startY):
+        """Puts el shaped tile to the landscape and returns the copy of updated version"""
+        cp = landscape.bushes.copy()
+        for i in range(startX, startX + config.TILE_SIZE):
+            for j in range(startY, startY + config.TILE_SIZE):
                 if (i == startX) or (j == startY):
-                    landscape.landscape[i][j] = 0
-        return land_copy
+                    cp[i][j] = 0
+        return cp
 
     def __str__(self) -> str:
         return f'Tile: {self.type}. Count: {self.count}.'

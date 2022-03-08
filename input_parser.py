@@ -10,13 +10,13 @@ class TPInput:
             lines = f.readlines()
 
         self.lines = list(map(lambda x: re.sub('[\n]$', '', x), lines))
-        self.land_idx, self.tile_idx, self.target_idx, self.land_size = self.get_indexes()
+        self.land_idx, self.tile_idx, self.target_idx, self.land_size = self.get_inds_and_size()
         self.COLORS = config.COLORS
         self.land_arr = self.read_landscape()
         self.tiles = self.read_tiles()
         self.targets = self.read_targets()
 
-    def get_indexes(self):
+    def get_inds_and_size(self):
         """Reads the given txt and extracts the indexes of landscape, tiles, and targets from it. Landscape size is also
         got using this function."""
         land_idx, tile_idx, target_idx = 0, 0, 0
@@ -40,41 +40,37 @@ class TPInput:
 
     def read_landscape(self):
         """Reads the list of strings to generate a matrix of integers representing landscape."""
-        land_str = self.lines[self.land_idx:self.land_idx+self.land_size]
-
-        land_arr = [[0] * self.land_size for _ in range(self.land_size)]
+        land_int = [[0] * self.land_size for _ in range(self.land_size)]
+        land_strs = self.lines[self.land_idx:self.land_idx+self.land_size]
 
         for i in range(self.land_size):
-            t = 0
+            cnt = 0
             for j in range(0, 2 * self.land_size, 2):
-                if land_str[i][j] != ' ':
-                    land_arr[i][t] = int(land_str[i][j])
-                t += 1
+                if land_strs[i][j] != ' ':
+                    land_int[i][cnt] = int(land_strs[i][j])
+                cnt += 1
 
-        return land_arr
+        return land_int
 
     def read_tiles(self):
         """Reads tiles into lists of landscape instance. Tiles are stored there as tile objects."""
-        tiles = self.lines[self.tile_idx]
+        tile_objs = []
+        tile_strs = self.lines[self.tile_idx]
+        tile_strs = re.sub('[{}]', '', tile_strs)
+        tile_strs = list(map(lambda t: t.strip(), tile_strs.split(',')))
 
-        tile_list = []
-        tiles = re.sub('[{}]', '', tiles)
-        tiles = list(map(lambda x: x.strip(), tiles.split(',')))
+        for t in tile_strs:
+            k, v = t.split('=')
+            tile_objs.append(Tile((k, int(v))))
 
-        for tile in tiles:
-            key, value = tile.split('=')
-            tile_list.append(Tile((key, int(value))))
-
-        return tile_list
+        return tile_objs
 
     def read_targets(self):
         """Reads targets as a dictionary of colors."""
-        targets = self.lines[self.target_idx:self.target_idx+self.COLORS]
+        tar = self.lines[self.target_idx:self.target_idx+self.COLORS]
+        t_dict = {}
+        for t in tar:
+            k, v = t.split(':')
+            t_dict[k] = int(v)
 
-        taget_dict = {}
-
-        for target in targets:
-            key, value = target.split(':')
-            taget_dict[key] = int(value)
-
-        return taget_dict
+        return t_dict
