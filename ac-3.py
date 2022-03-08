@@ -16,7 +16,8 @@ def tile_count(subland1, subland2, tile1, tile2):
         return False
 
 def bush_count(subland1, subland2, tile1, tile2):
-    """Checks whther the tiles can be put to the landscape at the same time vithout violating the final color limitation"""
+    """Checks whther the tiles can be put to the landscape at the same time vithout violating the final color
+    limitation"""
     return landscape.can_put_tile(tile1, variables[subland1]) and landscape.can_put_tile(tile2, variables[subland2])
 
 # List of constraints
@@ -28,7 +29,8 @@ constraints = [tile_count, bush_count]
 # arcs = [(0, 1), (1, 5), (1, 2), (1, 6) ...]
 
 def revise(subland1, subland2):
-    """Make variable `subland1` arc consistent with variable `subland2`. Sublandscape is a 4x4 sized divisions of the landscape"""
+    """Make variable `subland1` arc consistent with variable `subland2`. Sublandscape is a 4x4 sized divisions of
+    the landscape"""
     revised = False
 
     # Get x and y domains
@@ -51,13 +53,11 @@ def revise(subland1, subland2):
     return revised
 
 
-
 def ac3(arcs):
     """Update `domains` such that each variable is arc consistent."""
     # Add all the arcs to a queue.
     queue = arcs[:]
 
-    # Repeat until the queue is empty
     while queue:
         # Take the first arc off the queue (dequeue)
         (x, y) = queue.pop(0)
@@ -65,7 +65,6 @@ def ac3(arcs):
         # Make x arc consistent with y
         revised = revise(x, y)
 
-        # If the x domain has changed
         if revised:
             # Add all arcs of the form (k, x) to the queue (enqueue)
             neighbors = [neighbor for neighbor in arcs if neighbor[1] == x]

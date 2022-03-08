@@ -6,7 +6,9 @@ from landscape import Landscape
 
 
 class TestLandscape(unittest.TestCase):
+    """Tests whether operations on the landscape are done correctly"""
     def test_count_colors(self):
+        """Checks whether counting color function is working properly."""
         correct_colors = [{'1': 83, '2': 80, '3': 74, '4': 75},
                           {'1': 77, '2': 72, '3': 65, '4': 94},
                           {'1': 78, '2': 81, '3': 75, '4': 83},
@@ -22,11 +24,8 @@ class TestLandscape(unittest.TestCase):
                           {'1': 83, '2': 73, '3': 81, '4': 70},
                           {'1': 77, '2': 83, '3': 75, '4': 76},
                           {'1': 67, '2': 91, '3': 74, '4': 88},
-                          {'1': 71, '2': 88, '3': 77, '4': 78},
-                          {'1': 70, '2': 93, '3': 85, '4': 70},
-                          {'1': 83, '2': 72, '3': 75, '4': 89},
-                          {'1': 74, '2': 76, '3': 96, '4': 85},
-                          {'1': 68, '2': 69, '3': 85, '4': 86}]
+                          {'1': 74, '2': 76, '3': 96, '4': 85}]
+
 
         for i, file in enumerate(sorted(os.listdir('../inputs'))):
             tp_input = TPInput(os.path.join('../inputs', file))
@@ -34,6 +33,7 @@ class TestLandscape(unittest.TestCase):
             self.assertEqual(landscape.count_colors(), correct_colors[i])
 
     def test_outer_tile(self):
+        """Checks whether putting outer tile have the desired result."""
         tp_input = TPInput('../inputs/tilesproblem_1326658913086500.txt')
         landscape = Landscape(tp_input)
 
@@ -64,6 +64,7 @@ class TestLandscape(unittest.TestCase):
         self.assertEqual(landscape.landscape, correct_outer)
 
     def test_el_tile(self):
+        """Checks whether putting el shape tile have the desired result."""
         tp_input = TPInput('../inputs/tilesproblem_1326658913086500.txt')
         landscape = Landscape(tp_input)
 
@@ -94,6 +95,7 @@ class TestLandscape(unittest.TestCase):
         self.assertEqual(landscape.landscape, correct_el)
 
     def test_full_tile(self):
+        """Checks whether putting full shape tile have the desired result."""
         tp_input = TPInput('../inputs/tilesproblem_1326658913086500.txt')
         landscape = Landscape(tp_input)
 

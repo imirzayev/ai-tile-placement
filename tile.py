@@ -3,7 +3,6 @@ import config
 class Tile:
     def __init__(self, tile):
         self.size = config.TILE_SIZE
-
         self.type = tile[0]
         self.count = tile[1]
 

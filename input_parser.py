@@ -2,6 +2,7 @@ import re
 import config
 from tile import Tile
 
+
 class TPInput:
 
     def __init__(self, file_path):
@@ -16,7 +17,10 @@ class TPInput:
         self.targets = self.read_targets()
 
     def get_indexes(self):
+        """Reads the given txt and extracts the indexes of landscape, tiles, and targets from it. Landscape size is also
+        got using this function."""
         land_idx, tile_idx, target_idx = 0, 0, 0
+
         tiles_found = False
 
         for i, x in enumerate(self.lines):
@@ -35,6 +39,7 @@ class TPInput:
         return land_idx, tile_idx, target_idx, land_size
 
     def read_landscape(self):
+        """Reads the list of strings to generate a matrix of integers representing landscape."""
         land_str = self.lines[self.land_idx:self.land_idx+self.land_size]
 
         land_arr = [[0] * self.land_size for _ in range(self.land_size)]
@@ -48,12 +53,12 @@ class TPInput:
 
         return land_arr
 
-
     def read_tiles(self):
+        """Reads tiles into lists of landscape instance. Tiles are stored there as tile objects."""
         tiles = self.lines[self.tile_idx]
 
         tile_list = []
-        tiles = re.sub('[\{\}]', '', tiles)
+        tiles = re.sub('[{}]', '', tiles)
         tiles = list(map(lambda x: x.strip(), tiles.split(',')))
 
         for tile in tiles:
@@ -62,8 +67,8 @@ class TPInput:
 
         return tile_list
 
-
     def read_targets(self):
+        """Reads targets as a dictionary of colors."""
         targets = self.lines[self.target_idx:self.target_idx+self.COLORS]
 
         taget_dict = {}

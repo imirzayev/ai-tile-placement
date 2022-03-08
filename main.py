@@ -1,21 +1,20 @@
 from input_parser import TPInput
 from landscape import Landscape
-from backtracking import backtrack
+from backtracking import solve
 import os
-
+import time
 
 
 if __name__ == "__main__":
-    file = os.path.join('inputs', 'tilesproblem_1326658913086500.txt')
+    input_name = 'tilesproblem_1326658913086500.txt'
+    file = os.path.join('inputs', input_name)
     tile_input = TPInput(file)
     landscape = Landscape(tile_input)
     print(landscape)
     print(landscape.targets)
-    # landscape.get_lcv_tile(0, 0)
-    # landscape.get_domains()
-
-    backtrack(landscape, 0, 0)
+    start_time = time.time()
+    solve(landscape, 0, 0)
     print(landscape)
     print(landscape.count_colors(landscape.landscape))
-    print(landscape.solution_map)
-    print('Done')
+    print(landscape.print_output())
+    print("Done in --- %.2f seconds ---" % (time.time() - start_time))

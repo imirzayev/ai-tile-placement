@@ -1,4 +1,6 @@
-def backtrack(landscape, startX, startY):
+def solve(landscape, startX, startY):
+    """Recursive backtracking algorithm to solve the problem."""
+
     if landscape.has_reached_target():
         return True
 
@@ -17,7 +19,7 @@ def backtrack(landscape, startX, startY):
             prevstartY, prevstartX = startY, startX
             startX, startY = landscape.get_next_location(startX, startY)
 
-            if backtrack(landscape, startX, startY):
+            if solve(landscape, startX, startY):
                 return True
             
             startX, startY = prevstartX, prevstartY
