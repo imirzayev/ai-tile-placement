@@ -73,10 +73,3 @@ class TPInput:
             taget_dict[key] = int(value)
 
         return taget_dict
-
-
-if __name__ == '__main__':
-    tp_input = TPInput('inputs/tilesproblem_1326658913086500.txt')
-    print(tp_input.land_arr)
-    print(tp_input.tiles)
-    print(tp_input.targets)
