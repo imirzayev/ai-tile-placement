@@ -20,7 +20,8 @@ python3 main.py
 `config.py` - Constant configurations about the problem
 
 `backtracking.py` - Backtracking algorithm
-ac-3.py - Arc consistency algorithm
+
+`ac-3.py` - Arc consistency algorithm
 
 `inputs` - inputs directory
 
