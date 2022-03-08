@@ -6,7 +6,7 @@ import time
 
 
 if __name__ == "__main__":
-    input_name = 'tilesproblem_1326658934155700.txt'
+    input_name = 'tilesproblem_1326658928646700.txt'
     file = os.path.join('inputs', input_name)
     tile_input = TPInput(file)
     landscape = Landscape(tile_input)
